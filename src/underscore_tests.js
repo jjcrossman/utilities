@@ -117,14 +117,20 @@ var _ = { };
     return array;
   };
 
-  // Takes an array of objects and returns and array of the values of
+  // Takes an array of objects and returns an array of the values of
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
   _.pluck = function(array, propertyName) {
+    var retArr = [];
+    for ( var i = 0; i < array.length; i++ ) {
+      retArr.push( array[i][propertyName] );
+    }
+    return retArr;
   };
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
+    
   };
 
   // Reduces an array or object to a single value by repetitively calling

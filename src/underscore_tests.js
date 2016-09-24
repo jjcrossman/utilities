@@ -130,27 +130,97 @@ var _ = { };
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
-    
+
+    var j = 0;
+    for ( var i = 0; i < list.length; i++ ) {
+      if ( list[i][j] ) {
+        list[i][j].methodName( args );
+        j++;
+        i--;
+      } else {
+        j = 0;
+      }
+    }
+//INVOKE IS VERY STRANGE, AND I DON'T REALLY GET IT!
   };
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(previousValue, item) for each item. previousValue should be
   // the return value of the previous iterator call.
   _.reduce = function(collection, iterator, initialValue) {
+    if ( initialValue ) {
+    var previousValue = initialValue;
+    } else {
+    var previousValue = 0;
+    }
+
+    for ( var i = 0; i < collection.length; i++ ) {
+      var previousValue = iterator( previousValue, collection[i] );
+    }
+    return previousValue;
   };
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
+    if ( typeof collection === "object" ) {
+      for ( var key in collection ) {
+          if ( collection[key] === target ) {
+            return true;
+          }
+      }
+    }
+    if ( typeof collection === "array" ) {
+      for ( var i = 0; i < collection.length; i++ ) {
+        if ( collection[i] === target ) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   };
 
 
   // Determine whether all of the elements match a truth test.
-  _.every = function(collection, iterator) {
+  _.every = function( collection, iterator) {
+    if ( !iterator || !collection || collection.length === 0 ) {
+      return true;
+    }
+    var count;
+    for ( var i = 0; i < collection.length; i++ ) {
+      if ( !iterator( collection[i] ) ) {
+        return false;
+      }
+    }
+
+    return true;
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
-  _.some = function(collection, iterator) {
+  _.some = function( collection, iterator ) {
+    if ( !collection || collection.length === 0 ) {
+      return false;
+    }
+    if ( !iterator ) {
+      var replacement = function ( item ) {
+        return !!item ? true : false;
+      }; }
+    for ( var i = 0; i < collection.length; i++ ) {
+      if ( !iterator ) {
+        if ( replacement( collection[i] ) ) {
+          return true;
+        }
+        continue;
+      }
+      if ( iterator( collection[i] ) ) {
+        return true;
+      }
+    }
+    return false;
+
+
   };
 
 
@@ -164,6 +234,7 @@ var _ = { };
   // Extend a given object with all the properties of the passed in
   // object(s).
   _.extend = function(obj) {
+
   };
 
   // Like extend, but doesn't ever overwrite a key that already
